@@ -1,0 +1,30 @@
+# Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# .NET
+backend/**/bin/
+backend/**/obj/
+
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+
+# Environment / secrets
+*.env
+*.env.local
+
+# OS files
+.DS_Store
+Thumbs.db

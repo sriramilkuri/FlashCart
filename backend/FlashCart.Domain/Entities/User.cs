@@ -1,0 +1,14 @@
+using System.Dynamic;
+
+namespace FlashCart.Domain.Entities
+{
+    public class User
+    {
+        public int Id{get;set;}
+        public string Name{get;set;} = string.Empty;
+        public string Email{get;set;} = string.Empty;
+        public ICollection<Cart> Cart{get;set;} = new List<Cart>();
+        public ICollection<Order> Orders{get;set;} = new List<Order>();
+
+    }
+}
