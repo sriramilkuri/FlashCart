@@ -1,10 +1,23 @@
 import { Product } from "./types";
 import "./products.css";
 import Link from "next/link";
+import { getAccessToken } from "../lib/auth";
 
+const API_URL = process.env.API_URL;
 async function getProducts(): Promise<Product[]> {
+
+      const token = await getAccessToken();
+  
   const response = await fetch(
-    "http://localhost:5011/api/Products"
+    
+             `${API_URL}/api/Products`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    }
   );
 
   if (!response.ok) {
