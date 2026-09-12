@@ -48,7 +48,8 @@ var existingUser = await _context.Users
         {
             Name = request.Name.Trim(),
             Email = email,
-            PasswordHash = passwordHash
+            PasswordHash = passwordHash,
+            Role = "Customer"
         };
 
         _context.Users.Add(user);
