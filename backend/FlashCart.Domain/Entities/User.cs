@@ -10,6 +10,7 @@ namespace FlashCart.Domain.Entities
         public string PasswordHash{get;set;} = string.Empty;
         public ICollection<Cart> Cart{get;set;} = new List<Cart>();
         public ICollection<Order> Orders{get;set;} = new List<Order>();
+        public string Role{get;set;} = "Customer";
 
     }
 }

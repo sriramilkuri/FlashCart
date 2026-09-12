@@ -21,6 +21,10 @@ public class UsersController : ControllerBase
         var email = User.FindFirst(
             ClaimTypes.Email)?.Value;
 
+        var role = User.FindFirst(
+            ClaimTypes.Role)?.Value;
+        
+
         return Ok(new
         {
             userId,
