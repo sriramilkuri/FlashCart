@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Flashcart.Loadtester/1.0.0": {
+        "runtime": {
+          "Flashcart.Loadtester.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Flashcart.Loadtester/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

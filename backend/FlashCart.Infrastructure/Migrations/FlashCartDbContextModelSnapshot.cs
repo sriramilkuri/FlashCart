@@ -83,6 +83,45 @@ namespace FlashCart.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("FlashCart.Domain.Entities.Inventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReservedQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Inventories", t =>
+                        {
+                            t.HasCheckConstraint("CK_Inventory_Quantity_NonNegative", "\"Quantity\" >= 0");
+
+                            t.HasCheckConstraint("CK_Inventory_ReservedQuantity_NonNegative", "\"ReservedQuantity\" >= 0");
+
+                            t.HasCheckConstraint("CK_Inventory_Reserved_NotGreaterThan_Quantity", "\"ReservedQuantity\" <= \"Quantity\"");
+                        });
+                });
+
             modelBuilder.Entity("FlashCart.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -93,6 +132,9 @@ namespace FlashCart.Infrastructure.Migrations
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("numeric");
@@ -118,14 +160,14 @@ namespace FlashCart.Infrastructure.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -158,6 +200,9 @@ namespace FlashCart.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(10, 2)
                         .HasColumnType("numeric(10,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -225,6 +270,17 @@ namespace FlashCart.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("FlashCart.Domain.Entities.Inventory", b =>
+                {
+                    b.HasOne("FlashCart.Domain.Entities.Product", "Product")
+                        .WithOne("Inventory")
+                        .HasForeignKey("FlashCart.Domain.Entities.Inventory", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("FlashCart.Domain.Entities.Order", b =>
                 {
                     b.HasOne("FlashCart.Domain.Entities.User", "User")
@@ -279,6 +335,12 @@ namespace FlashCart.Infrastructure.Migrations
             modelBuilder.Entity("FlashCart.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("FlashCart.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Inventory")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FlashCart.Domain.Entities.User", b =>

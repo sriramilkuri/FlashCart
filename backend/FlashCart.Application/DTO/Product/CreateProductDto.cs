@@ -1,4 +1,4 @@
-namespace FlashCart.Application.DTOs;
+namespace FlashCart.Application.DTO.Product;
 
 public class CreateProductDto
 {
