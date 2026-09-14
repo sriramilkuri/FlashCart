@@ -10,6 +10,9 @@ public class Product
     public string Description {get; set;} = string.Empty;
     public int CategoryId {get;set;}
     public Category Category = null!;
+    
+    public int Stock{get;set;}
+       public Inventory Inventory { get; set; } = null!;
 
 
 }

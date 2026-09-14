@@ -1,6 +1,7 @@
 using System.Text;
 
 using FlashCart.Application.Interfaces;
+using FlashCart.Domain.Services;
 using FlashCart.Infrastructure.Data;
 using FlashCart.Infrastructure.Services;
 
@@ -25,6 +26,8 @@ builder.Services.AddScoped<
     IJwtTokenService,
     JwtTokenService>();
 
+builder.Services.AddScoped<CartPricingService>();
+builder.Services.AddScoped<OrderStateMachine>();
 var jwtKey = builder.Configuration["Jwt:Key"];
 
 if (string.IsNullOrWhiteSpace(jwtKey))
@@ -67,10 +70,22 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin");
     });
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();
 

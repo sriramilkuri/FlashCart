@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -28,53 +29,69 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Login failed.");
+        setError(
+          data.message || "Login failed."
+        );
         return;
       }
 
-      console.log("Logged in:", data);
-
       // Redirect after successful login
-      router.push("/products");
+      router.push("/products?page=1");
     } catch (error) {
       console.error("Login error:", error);
-      setError("Something went wrong. Please try again.");
+
+      setError(
+        "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center mb-2">
-          Login
-        </h1>
+    <main className="fc-auth-page">
+      <div className="fc-auth-card">
 
-        <p className="text-gray-500 text-center mb-6">
-          Login to your FlashCart account
-        </p>
+        {/* Header */}
+        <div className="fc-auth-header">
+          <h1 className="fc-auth-title">
+            Welcome back
+          </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+          <p className="fc-auth-description">
+            Login to your FlashCart account
+          </p>
+        </div>
+
+
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="fc-form"
+        >
+
           {/* Email */}
-          <div>
+          <div className="fc-form-group">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="fc-label"
             >
               Email
             </label>
@@ -83,18 +100,21 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
               placeholder="Enter your email"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="fc-input"
               disabled={loading}
             />
           </div>
 
+
           {/* Password */}
-          <div>
+          <div className="fc-form-group">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="fc-label"
             >
               Password
             </label>
@@ -103,39 +123,53 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
               placeholder="Enter your password"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="fc-input"
               disabled={loading}
             />
           </div>
 
+
           {/* Error */}
           {error && (
-            <div className="bg-red-100 text-red-700 px-4 py-3 rounded-md">
+            <div
+              className="fc-alert fc-alert-error"
+              role="alert"
+            >
               {error}
             </div>
           )}
+
 
           {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400"
+            className="fc-button fc-button-primary fc-button-full"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading
+              ? "Logging in..."
+              : "Login"}
           </button>
+
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-Don&apos;t have an account?{" "}
-          <a
+
+        {/* Register */}
+        <p className="fc-auth-footer">
+          Don&apos;t have an account?{" "}
+
+          <Link
             href="/register"
-            className="text-blue-600 hover:underline"
+            className="fc-auth-link"
           >
             Register
-          </a>
+          </Link>
         </p>
+
       </div>
     </main>
   );

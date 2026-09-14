@@ -1,0 +1,15 @@
+D:\FlashCart\FlashCart.LoadTester\bin\Debug\net10.0\Flashcart.Loadtester.exe
+D:\FlashCart\FlashCart.LoadTester\bin\Debug\net10.0\Flashcart.Loadtester.deps.json
+D:\FlashCart\FlashCart.LoadTester\bin\Debug\net10.0\Flashcart.Loadtester.runtimeconfig.json
+D:\FlashCart\FlashCart.LoadTester\bin\Debug\net10.0\Flashcart.Loadtester.dll
+D:\FlashCart\FlashCart.LoadTester\bin\Debug\net10.0\Flashcart.Loadtester.pdb
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.GeneratedMSBuildEditorConfig.editorconfig
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.AssemblyInfoInputs.cache
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.AssemblyInfo.cs
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.csproj.CoreCompileInputs.cache
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.sourcelink.json
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.dll
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\refint\Flashcart.Loadtester.dll
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.pdb
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\Flashcart.Loadtester.genruntimeconfig.cache
+D:\FlashCart\FlashCart.LoadTester\obj\Debug\net10.0\ref\Flashcart.Loadtester.dll

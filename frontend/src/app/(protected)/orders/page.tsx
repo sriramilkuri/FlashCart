@@ -1,47 +1,92 @@
-import { getOrders } from "@/app/lib/api";
+import Link from "next/link";
 
-interface OrderItem {
-  id: number;
-  productId: number;
-  quantity: number;
-  price: number;
-}
+import { getOrders } from "./api";
 
-interface Order {
-  id: number;
-  orderDate: string;
-  total: number;
-  orderItems: OrderItem[];
-}
 
 export default async function OrdersPage() {
-  const orders = (await getOrders()) as Order[] | null;
+  const orders = await getOrders();
 
   return (
-    <main>
-      <h1>My Orders</h1>
+    <main className="orders-page">
+      <div className="orders-container">
+        <h1>My Orders</h1>
 
-      {!orders || orders.length === 0 ? (
-        <p>No orders yet.</p>
-      ) : (
-        orders.map((order) => (
-          <div key={order.id}>
-            <h2>Order #{order.id}</h2>
+        {orders.length === 0 ? (
+          <div className="order-not-found">
+            <h2>No orders found</h2>
 
             <p>
-              Date: {order.orderDate}
-            </p>
-
-            <p>
-              Total: ₹{order.total}
-            </p>
-
-            <p>
-              Items: {order.orderItems.length}
+              You havent placed any orders yet.
             </p>
           </div>
-        ))
-      )}
+        ) : (
+          <section className="orders-list">
+            {orders.map((order) => (
+              <article
+                key={order.orderId}
+                className="order-card"
+              >
+                <div className="order-card-header">
+                  <div>
+                    <p className="order-label">
+                      Order
+                    </p>
+
+                    <h2>
+                      #{order.orderId}
+                    </h2>
+                  </div>
+
+                  <div className="order-status">
+                    {order.status}
+                  </div>
+                </div>
+
+                <div className="order-card-details">
+                  <div>
+                    <span>Date</span>
+
+                    <strong>
+                      {new Date(
+                        order.orderDate
+                      ).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Items</span>
+
+                    <strong>
+                      {order.items.length}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Total</span>
+
+                    <strong>
+                      ₹{order.total.toFixed(2)}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="order-card-footer">
+                  <Link
+                    href={`/orders/${order.orderId}`}
+                    className="view-order-link"
+                  >
+                    View Order
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </section>
+        )}
+      </div>
     </main>
   );
 }

@@ -24,6 +24,7 @@ public class FlashCartDbContext : DbContext
     public DbSet<Order> Orders => Set<Order>();
 
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
 
 
 protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,5 +69,34 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         .HasOne(oi => oi.Product)
         .WithMany()
         .HasForeignKey(oi => oi.ProductId);
+
+        modelBuilder.Entity<Inventory>()
+    .HasOne(i => i.Product)
+    .WithOne(p => p.Inventory)
+    .HasForeignKey<Inventory>(i => i.ProductId);
+
+    modelBuilder.Entity<Inventory>()
+    .HasIndex(i => i.ProductId)
+    .IsUnique();
+    
+    modelBuilder.Entity<Inventory>()
+    .Property(i => i.Version)
+    .IsConcurrencyToken();
+
+    modelBuilder.Entity<Inventory>()
+    .ToTable(table =>
+    {
+        table.HasCheckConstraint(
+            "CK_Inventory_Quantity_NonNegative",
+            "\"Quantity\" >= 0");
+
+        table.HasCheckConstraint(
+            "CK_Inventory_ReservedQuantity_NonNegative",
+            "\"ReservedQuantity\" >= 0");
+
+        table.HasCheckConstraint(
+            "CK_Inventory_Reserved_NotGreaterThan_Quantity",
+            "\"ReservedQuantity\" <= \"Quantity\"");
+    });
 }
 }
