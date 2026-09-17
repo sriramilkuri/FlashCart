@@ -14,7 +14,8 @@ public class FlashCartDbContext :
     {
     }
 
-
+public DbSet<ProcessedMessage> ProcessedMessages
+    => Set<ProcessedMessage>();
     public DbSet<Payment> Payments => Set<Payment>();
 
     public DbSet<Category> Categories => Set<Category>();
@@ -40,7 +41,15 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
   modelBuilder.Entity<Product>()
         .Property(p => p.Price)
         .HasPrecision(10, 2);
-        
+
+   modelBuilder.Entity<ProcessedMessage>()
+    .HasIndex(x => new
+    {
+        x.EventId,
+        x.ConsumerName
+    })
+    .IsUnique();
+
     modelBuilder.Entity<Product>()
         .HasOne(p => p.Category)
         .WithMany(c => c.Products)

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using FlashCart.Application.Common.Interfaces;
 using StackExchange.Redis;
 using FlashCart.Infrastructure.Caching;
+using FlashCart.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,16 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(
 );
 builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
+builder.Services.AddSingleton<RabbitMqPublisher>(sp =>
+{
+    var configuration =
+        sp.GetRequiredService<IConfiguration>();
 
+    var connectionString =
+        configuration["RabbitMQ:ConnectionString"];
+
+    return new RabbitMqPublisher(connectionString!);
+});
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 

@@ -4,5 +4,8 @@
   </Folder>
   <Project Path="FlashCart.API/FlashCart.API.csproj" />
   <Project Path="FlashCart.Application/FlashCart.Application.csproj" />
+  <Project Path="FlashCart.AuditWorker/FlashCart.AuditWorker.csproj" />
   <Project Path="FlashCart.Infrastructure/FlashCart.Infrastructure.csproj" />
+  <Project Path="FlashCart.NotificationWorker/FlashCart.NotificationWorker.csproj" />
+  <Project Path="FlashCart.PaymentWorker/FlashCart.PaymentWorker.csproj" />
 </Solution>

@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using FlashCart.Application.DTO.Checkout;
+using FlashCart.Application.Events;
 using FlashCart.Domain.Entities;
 using FlashCart.Domain.Enums;
 using FlashCart.Domain.Services;
 using FlashCart.Infrastructure.Data;
+using FlashCart.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +20,16 @@ public class CheckoutController : ControllerBase
     private readonly FlashCartDbContext _dbContext;
     private readonly CartPricingService _pricingService;
 
+    private readonly RabbitMqPublisher _rabbitMQPublisher;
+
     public CheckoutController(
         FlashCartDbContext dbContext,
-        CartPricingService pricingService)
+        CartPricingService pricingService,
+        RabbitMqPublisher rabbitMQPublisher)
     {
         _dbContext = dbContext;
         _pricingService = pricingService;
+        _rabbitMQPublisher = rabbitMQPublisher;
     }
 
     [HttpPost]
@@ -106,6 +112,21 @@ public class CheckoutController : ControllerBase
             }
 
             _dbContext.Orders.Add(order);
+            
+            var OrderCreatedEvent = new OrderCreatedEvent
+            {
+                EventId = Guid.NewGuid(),
+                OrderId = order.Id,
+                UserId = order.UserId,
+                Total = order.Total,
+                CreatedAt = order.OrderDate
+                
+            };
+            
+            await _rabbitMQPublisher.PublishAsync(
+    OrderCreatedEvent,
+    "flashcart.events",
+    "order.created");
 
             _dbContext.CartItems.RemoveRange(
                 cart.CartItems);

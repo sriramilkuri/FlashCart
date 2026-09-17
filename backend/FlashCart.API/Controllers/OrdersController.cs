@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using FlashCart.Application.DTO.Orders;
 using FlashCart.Domain.Services;
 using FlashCart.Domain.Enums;
+using FlashCart.Infrastructure.Messaging;
 
 namespace FlashCart.API.Controllers;
 
@@ -16,10 +17,12 @@ public class OrdersController : ControllerBase
 {
     private readonly FlashCartDbContext _dbContext;
     private readonly OrderStateMachine _orderStateMachine;
-    public OrdersController(FlashCartDbContext context, OrderStateMachine orderStateMachine)
+    private readonly RabbitMqPublisher _rabbitMQPublisher;
+    public OrdersController(FlashCartDbContext context, OrderStateMachine orderStateMachine, RabbitMqPublisher rabbitMQPublisher)
     {
         _dbContext = context;
         _orderStateMachine = orderStateMachine;
+        _rabbitMQPublisher = rabbitMQPublisher;
 
     }
 
