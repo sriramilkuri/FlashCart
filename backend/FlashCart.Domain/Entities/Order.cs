@@ -19,6 +19,9 @@ public class Order
     public ICollection<OrderItem> OrderItems { get; set; }
         = new List<OrderItem>();
 
+    public ICollection<Payment> Payments { get; set; }
+    = new List<Payment>();
+    
     public void Confirm()
     {
         if (Status != OrderStatus.Pending)

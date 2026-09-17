@@ -1,15 +1,21 @@
 using FlashCart.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using FlashCart.Application.Common.Interfaces;
 
 namespace FlashCart.Infrastructure.Data;
 
-public class FlashCartDbContext : DbContext
+public class FlashCartDbContext :
+    DbContext,
+    IApplicationDbContext
 {
     public FlashCartDbContext(
         DbContextOptions<FlashCartDbContext> options)
         : base(options)
     {
     }
+
+
+    public DbSet<Payment> Payments => Set<Payment>();
 
     public DbSet<Category> Categories => Set<Category>();
 
@@ -64,6 +70,10 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
         .HasOne(oi => oi.Order)
         .WithMany(o => o.OrderItems)
         .HasForeignKey(oi => oi.OrderId);
+    
+    modelBuilder.Entity<Payment>()
+    .HasIndex(p => p.IdempotencyKey)
+    .IsUnique();
 
     modelBuilder.Entity<OrderItem>()
         .HasOne(oi => oi.Product)
@@ -82,6 +92,15 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     modelBuilder.Entity<Inventory>()
     .Property(i => i.Version)
     .IsConcurrencyToken();
+
+    modelBuilder.Entity<Payment>()
+    .HasOne(p => p.Order)
+    .WithMany(o => o.Payments)
+    .HasForeignKey(p => p.OrderId);
+
+    modelBuilder.Entity<Payment>()
+    .HasIndex(p => p.IdempotencyKey)
+    .IsUnique();
 
     modelBuilder.Entity<Inventory>()
     .ToTable(table =>

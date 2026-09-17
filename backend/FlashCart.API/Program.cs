@@ -1,6 +1,7 @@
 using System.Text;
 
 using FlashCart.Application.Interfaces;
+using FlashCart.Application.Payments;
 using FlashCart.Domain.Services;
 using FlashCart.Infrastructure.Data;
 using FlashCart.Infrastructure.Services;
@@ -8,6 +9,9 @@ using FlashCart.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using FlashCart.Application.Common.Interfaces;
+using StackExchange.Redis;
+using FlashCart.Infrastructure.Caching;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +32,24 @@ builder.Services.AddScoped<
 
 builder.Services.AddScoped<CartPricingService>();
 builder.Services.AddScoped<OrderStateMachine>();
+builder.Services.AddScoped<PaymentService>();
+builder.Services.AddScoped<IPaymentProvider, MockPaymentProvider>();
+builder.Services.AddScoped<
+    IApplicationDbContext,
+    FlashCartDbContext>();
+builder.Services.AddScoped<RefundService>();
+builder.Services.Configure<RazorpayOptions>(
+    builder.Configuration.GetSection("Razorpay"));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(
+        builder.Configuration.GetConnectionString("Redis")!
+    )
+);
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
+
+
 var jwtKey = builder.Configuration["Jwt:Key"];
 
 if (string.IsNullOrWhiteSpace(jwtKey))

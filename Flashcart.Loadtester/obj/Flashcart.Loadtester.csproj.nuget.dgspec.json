@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FlashCart\\FlashCart.LoadTester\\Flashcart.Loadtester.csproj": {}
+    "D:\\FlashCart\\Flashcart.Loadtester\\Flashcart.Loadtester.csproj": {}
   },
   "projects": {
-    "D:\\FlashCart\\FlashCart.LoadTester\\Flashcart.Loadtester.csproj": {
+    "D:\\FlashCart\\Flashcart.Loadtester\\Flashcart.Loadtester.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FlashCart\\FlashCart.LoadTester\\Flashcart.Loadtester.csproj",
+        "projectUniqueName": "D:\\FlashCart\\Flashcart.Loadtester\\Flashcart.Loadtester.csproj",
         "projectName": "Flashcart.Loadtester",
-        "projectPath": "D:\\FlashCart\\FlashCart.LoadTester\\Flashcart.Loadtester.csproj",
+        "projectPath": "D:\\FlashCart\\Flashcart.Loadtester\\Flashcart.Loadtester.csproj",
         "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-        "outputPath": "D:\\FlashCart\\FlashCart.LoadTester\\obj\\",
+        "outputPath": "D:\\FlashCart\\Flashcart.Loadtester\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config"

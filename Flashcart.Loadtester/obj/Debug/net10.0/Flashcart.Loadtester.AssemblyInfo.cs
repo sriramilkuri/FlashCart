@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Flashcart.Loadtester")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f25fb5116c4fce8a8f7523ab2a590c2b0495ceec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a1e37bbeb95697f879f5f1711037057b7108665")]
 [assembly: System.Reflection.AssemblyProductAttribute("Flashcart.Loadtester")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Flashcart.Loadtester")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

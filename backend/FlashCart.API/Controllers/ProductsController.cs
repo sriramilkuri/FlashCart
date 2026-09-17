@@ -4,6 +4,8 @@ using FlashCart.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using FlashCart.Application.Common.Interfaces;
+using System.Text.Json;
 
 namespace FlashCart.API.Controllers;
 
@@ -13,10 +15,12 @@ namespace FlashCart.API.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly FlashCartDbContext _context;
+    private readonly ICacheService _cacheService;
 
-    public ProductsController(FlashCartDbContext context)
+    public ProductsController(FlashCartDbContext context, ICacheService cacheService)
     {
         _context = context;
+        _cacheService = cacheService;
     }
 
 [HttpGet]
@@ -219,29 +223,44 @@ hasNextPage = await query.AnyAsync(p => p.Id > lastProductId);
 
     return Ok(response);
 }
-  // GET: api/products/5
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProductById(int id)
+ [HttpGet("{id:int}")]
+public async Task<IActionResult> GetProduct(int id)
+{
+    var cacheKey = $"product:{id}";
+    var cachedProduct =
+        await _cacheService.GetAsync(cacheKey);
+     
+    if (cachedProduct != null)
     {
-        var product = await _context.Products
-            .Where(p => p.Id == id)
-            .Select(p => new ProductDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Price = p.Price,
-                Description = p.Description,
-                CategoryId = p.CategoryId
-            })
-            .FirstOrDefaultAsync();
+        Console.WriteLine("REDIS CACHE HIT");
 
-        if (product == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(product);
+        return Content(
+            cachedProduct,
+            "application/json");
     }
+  
+    Console.WriteLine("REDIS CACHE MISS");
+
+    var product =
+        await _context.Products
+            .Include(p => p.Category)
+            .SingleOrDefaultAsync(p => p.Id == id);
+
+    if (product == null)
+    {
+        return NotFound();
+    }
+
+    var productJson =
+        JsonSerializer.Serialize(product);
+
+    await _cacheService.SetAsync(
+        cacheKey,
+        productJson,
+        TimeSpan.FromMinutes(10));
+
+    return Ok(product);
+}
 
     // POST: api/products
     [HttpPost]
@@ -269,7 +288,7 @@ hasNextPage = await query.AnyAsync(p => p.Id > lastProductId);
         };
 
         return CreatedAtAction(
-            nameof(GetProductById),
+            nameof(GetProduct),
             new { id = product.Id },
             response);
     }
