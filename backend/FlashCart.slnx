@@ -2,6 +2,24 @@
   <Folder Name="/FlashCart.Domain/">
     <Project Path="FlashCart.Domain/Flashcart.Domain.csproj" />
   </Folder>
+  <Folder Name="/InventoryService/">
+    <Project Path="InventoryService/FlashCart.InventoryService.API/FlashCart.InventoryService.API.csproj" />
+    <Project Path="InventoryService/FlashCart.InventoryService.Application/FlashCart.InventoryService.Application.csproj" />
+    <Project Path="InventoryService/FlashCart.InventoryService.Domain/FlashCart.InventoryService.Domain.csproj" />
+    <Project Path="InventoryService/FlashCart.InventoryService.Infrastructure/FlashCart.InventoryService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/OrderService/">
+    <Project Path="OrderService/FlashCart.OrderService.API/FlashCart.OrderService.API.csproj" />
+    <Project Path="OrderService/FlashCart.OrderService.Application/FlashCart.OrderService.Application.csproj" />
+    <Project Path="OrderService/FlashCart.OrderService.Domain/FlashCart.OrderService.Domain.csproj" />
+    <Project Path="OrderService/FlashCart.OrderService.Infrastructure/FlashCart.OrderService.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/ProductService/">
+    <Project Path="ProductService/FlashCart.ProductService.API/FlashCart.ProductService.API.csproj" />
+    <Project Path="ProductService/FlashCart.ProductService.Application/FlashCart.ProductService.Application.csproj" />
+    <Project Path="ProductService/FlashCart.ProductService.Domain/FlashCart.ProductService.Domain.csproj" />
+    <Project Path="ProductService/FlashCart.ProductService.Infrastructure/FlashCart.ProductService.Infrastructure.csproj" />
+  </Folder>
   <Project Path="FlashCart.API/FlashCart.API.csproj" />
   <Project Path="FlashCart.Application/FlashCart.Application.csproj" />
   <Project Path="FlashCart.AuditWorker/FlashCart.AuditWorker.csproj" />

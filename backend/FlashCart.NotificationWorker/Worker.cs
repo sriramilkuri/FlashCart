@@ -222,12 +222,17 @@ public class Worker : BackgroundService
                     _logger.LogError(
                         "Maximum retries reached. Sending notification message to DLQ.");
 
-                    await channel.BasicPublishAsync(
-                        exchange: "flashcart.dlx",
-                        routingKey: "notification.failed",
-                        mandatory: false,
-                        basicProperties: args.BasicProperties,
-                        body: body);
+                 var dlqProperties = new BasicProperties
+{
+    Persistent = true
+};
+
+await channel.BasicPublishAsync(
+    exchange: "flashcart.dlx",
+    routingKey: "notification.failed",
+    mandatory: false,
+    basicProperties: dlqProperties,
+    body: body);
 
                     // Remove original from main queue
                     await channel.BasicAckAsync(
