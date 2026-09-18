@@ -1,0 +1,6 @@
+@FlashCart.CartService.API_HostAddress = http://localhost:5211
+
+GET {{FlashCart.CartService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/CartService/">
+    <Project Path="CartService/FlashCart.CartService.API/FlashCart.CartService.API.csproj" />
+    <Project Path="CartService/FlashCart.CartService.Application/FlashCart.CartService.Application.csproj" />
+    <Project Path="CartService/FlashCart.CartService.Domain/FlashCart.CartService.Domain.csproj" />
+    <Project Path="CartService/FlashCart.CartService.Infrastructure/FlashCart.CartService.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/FlashCart.Domain/">
     <Project Path="FlashCart.Domain/Flashcart.Domain.csproj" />
   </Folder>
