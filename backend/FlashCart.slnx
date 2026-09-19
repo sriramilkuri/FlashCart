@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/AuthService/">
+    <Project Path="AuthService/FlashCart.AuthService.API/FlashCart.AuthService.API.csproj" />
+    <Project Path="AuthService/FlashCart.AuthService.Application/FlashCart.AuthService.Application.csproj" />
+    <Project Path="AuthService/FlashCart.AuthService.Domain/FlashCart.AuthService.Domain.csproj" />
+    <Project Path="AuthService/FlashCart.AuthService.Infrastructure/FlashCart.AuthService.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/CartService/">
     <Project Path="CartService/FlashCart.CartService.API/FlashCart.CartService.API.csproj" />
     <Project Path="CartService/FlashCart.CartService.Application/FlashCart.CartService.Application.csproj" />

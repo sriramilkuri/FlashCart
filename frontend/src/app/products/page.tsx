@@ -1,61 +1,14 @@
 import Link from "next/link";
 
-import { ProductCursorResponse } from "./types";
+import {
+  getProducts,
+} from "@/app/lib/api/Products";
+
 import AddToCartButton from "./AddToCartButton";
+
 import { getAccessToken } from "../lib/auth";
 
 import "./products.css";
-
-const API_URL = process.env.API_URL;
-
-async function getProducts(
-  cursor: number | null,
-  pageSize: number,
-  direction: number,
-  categoryId: number | null,
-  minPrice: number | null,
-  maxPrice: number | null
-): Promise<ProductCursorResponse> {
-  const token = await getAccessToken();
-
-  const params = new URLSearchParams();
-
-  params.set("pageSize", pageSize.toString());
-  params.set("direction", direction.toString());
-
-  if (cursor !== null) {
-    params.set("cursor", cursor.toString());
-  }
-
-  if (categoryId !== null) {
-    params.set("categoryId", categoryId.toString());
-  }
-
-  if (minPrice !== null) {
-    params.set("minPrice", minPrice.toString());
-  }
-
-  if (maxPrice !== null) {
-    params.set("maxPrice", maxPrice.toString());
-  }
-
-  const response = await fetch(
-    `${API_URL}/api/Products?${params.toString()}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return response.json();
-}
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -76,48 +29,60 @@ export default async function ProductsPage({
   const cursor =
     params.cursor !== undefined
       ? Number(params.cursor)
-      : null;
+      : undefined;
 
   // Direction
   const direction =
     params.direction !== undefined
-      ? Number(params.direction)
+      ? Number(params.direction) as 1 | -1
       : 1;
 
   // Filters
   const categoryId =
     params.categoryId !== undefined
       ? Number(params.categoryId)
-      : null;
+      : undefined;
 
   const minPrice =
     params.minPrice !== undefined
       ? Number(params.minPrice)
-      : null;
+      : undefined;
 
   const maxPrice =
     params.maxPrice !== undefined
       ? Number(params.maxPrice)
-      : null;
+      : undefined;
 
   const pageSize = 20;
 
-  // Fetch products
-  const data = await getProducts(
+  /*
+   * Get JWT token.
+   *
+   * ProductService will eventually validate this token.
+   */
+  const token = await getAccessToken();
+
+  /*
+   * Fetch products from ProductService.
+   */
+  const data = await getProducts({
     cursor,
     pageSize,
     direction,
     categoryId,
     minPrice,
-    maxPrice
-  );
+    maxPrice,
+  });
 
-  // Create pagination URL
+  /*
+   * Create pagination URL.
+   */
   function createPaginationUrl(
     newCursor: number,
-    newDirection: number
+    newDirection: 1 | -1
   ) {
-    const searchParams = new URLSearchParams();
+    const searchParams =
+      new URLSearchParams();
 
     searchParams.set(
       "cursor",
@@ -177,7 +142,6 @@ export default async function ProductsPage({
           </span>
         </div>
 
-
         {/* Products */}
         {data.items.length > 0 ? (
           <div className="fc-product-grid">
@@ -187,7 +151,6 @@ export default async function ProductsPage({
                 className="fc-product-card"
                 key={product.id}
               >
-
                 <div className="fc-product-card-body">
 
                   <h2 className="fc-product-name">
@@ -218,7 +181,6 @@ export default async function ProductsPage({
                   </div>
 
                 </div>
-
               </article>
             ))}
 
@@ -235,7 +197,6 @@ export default async function ProductsPage({
             </p>
           </div>
         )}
-
 
         {/* Pagination */}
         {(data.hasPreviousPage ||

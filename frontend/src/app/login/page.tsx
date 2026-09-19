@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { login } from "@/app/lib/api/Auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,7 +21,6 @@ export default function LoginPage() {
 
     setError("");
 
-    // Basic validation
     if (!email || !password) {
       setError("Please enter email and password.");
       return;
@@ -29,37 +29,39 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
+      const data = await login({
+        email,
+        password,
+      });
+
+      // Store JWT for authenticated API calls
+      localStorage.setItem(
+        "accessToken",
+        data.token
       );
 
-      const data = await response.json();
+      // Store basic user information
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          userId: data.userId,
+          name: data.name,
+          email: data.email,
+          role: data.role,
+        })
+      );
 
-      if (!response.ok) {
-        setError(
-          data.message || "Login failed."
-        );
-        return;
-      }
-
-      // Redirect after successful login
       router.push("/products?page=1");
     } catch (error) {
       console.error("Login error:", error);
 
-      setError(
-        "Something went wrong. Please try again."
-      );
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(
+          "Something went wrong. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -79,7 +81,6 @@ export default function LoginPage() {
             Login to your FlashCart account
           </p>
         </div>
-
 
         {/* Form */}
         <form
@@ -109,7 +110,6 @@ export default function LoginPage() {
             />
           </div>
 
-
           {/* Password */}
           <div className="fc-form-group">
             <label
@@ -132,7 +132,6 @@ export default function LoginPage() {
             />
           </div>
 
-
           {/* Error */}
           {error && (
             <div
@@ -142,7 +141,6 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-
 
           {/* Submit */}
           <button
@@ -156,7 +154,6 @@ export default function LoginPage() {
           </button>
 
         </form>
-
 
         {/* Register */}
         <p className="fc-auth-footer">
@@ -174,3 +171,4 @@ export default function LoginPage() {
     </main>
   );
 }
+
